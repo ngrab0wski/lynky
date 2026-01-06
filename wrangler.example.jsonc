@@ -1,0 +1,7 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "lynky",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-11-17",
+  "kv_namespaces": []
+}
