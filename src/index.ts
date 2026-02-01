@@ -1,10 +1,19 @@
 import { zValidator } from "@hono/zod-validator";
+import { env } from "cloudflare:workers";
 import { Hono } from "hono";
+import { bearerAuth } from "hono/bearer-auth";
 import * as z from "zod/mini";
 import { getShortUrl } from "./model";
 import { getShortenedUrlById, storeShortenedUrl } from "./storage";
 
 const app = new Hono<{ Bindings: CloudflareBindings }>();
+
+// Enable bearer authentication using the configured AUTH_TOKEN.
+// This prevents anyone without the secret from adding new link entries.
+// For local development this can be disabled by not setting the AUTH_TOKEN variable in the .env file.
+if (env.AUTH_TOKEN) {
+  app.use("/shorten", bearerAuth({ token: env.AUTH_TOKEN }));
+}
 
 app.post(
   "/shorten",
